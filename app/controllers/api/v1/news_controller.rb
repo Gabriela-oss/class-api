@@ -18,7 +18,7 @@ class Api::V1::NewsController < ApplicationController
     @api_v1_news = News.new(api_v1_news_params)
 
     if @api_v1_news.save
-      render json: @api_v1_news, status: :created, location: @api_v1_news
+      render json: @api_v1_news, status: :created
     else
       render json: @api_v1_news.errors, status: :unprocessable_entity
     end
@@ -42,6 +42,13 @@ class Api::V1::NewsController < ApplicationController
     else
       render json: @api_v1_news.errors, status: :unprocessable_entity
     end
+  end
+
+  def between 
+    start = Date.parse(params[:start])
+    final = Date.parse(params[:final])
+    @news = News.where('created_at BETWEEN ? AND ?',start, final)
+    render json: @news, status: :ok
   end
 
   private
